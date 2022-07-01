@@ -1,0 +1,13 @@
+/*--------Universal styles*/
+:root
+{
+    --dark: ;
+    --med: ;
+    --light: ;
+    --accent: ;
+}
+
+*
+{
+    font-family: Helvetica, Arial, sans-serif;
+}
