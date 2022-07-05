@@ -46,17 +46,15 @@ var landingPage = function()
     insertText.appendChild(quizDesc);
     insertText.appendChild(startBtn);
 
-    
+    startBtn.addEventListener("click", startQuiz)
 };
 
-window.onload = landingPage();
-
-/*var startQuiz = function()
+var startQuiz = function()
 {
-
+    console.log("Quiz Started");
 };
 
-var selectAnswer = function()
+/*var selectAnswer = function()
 {
 
 };
@@ -70,3 +68,5 @@ var yourScore = function()
 {
 
 };*/
+
+window.onload = landingPage();
