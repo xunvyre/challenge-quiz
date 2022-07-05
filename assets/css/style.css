@@ -1,13 +1,106 @@
 /*--------Universal styles*/
 :root
 {
-    --dark: ;
-    --med: ;
-    --light: ;
-    --accent: ;
+    --accent: #fdc6c4;
+    --med: #7d6064;
+    --light: #fff;
+    --dark: #392320;
 }
 
 *
 {
     font-family: Helvetica, Arial, sans-serif;
+    background-color: var(--med);
+    color: var(--light);
+    font-size: 18px;
+}
+
+/*--------header styles*/
+header
+{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 10px;
+}
+
+.high-scores p
+{
+    color: var(--accent);
+}
+
+.high-scores p:hover
+{
+    color: var(--light);
+}
+
+/*--------main body styles*/
+
+main
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    margin: 50px;
+}
+
+.answer-check
+{
+    border-top: 1.5px solid var(--dark);
+    color: var(--dark);
+    padding: 10px 0 0 0;
+    margin: 50px;
+}
+
+/*------landing page styles*/
+
+.landing-title
+{
+    font-size: 36px;
+    text-align: center;
+}
+
+.landing-p
+{
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.landing-btn
+{
+    background-color: var(--dark);
+    padding: 15px 20px;
+    border: none;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.landing-btn:hover
+{
+    background-color: var(--accent);
+    color: var(--dark);
+}
+
+/*------question page styles*/
+
+.question
+{
+    font-size: 36px;
+}
+
+.option-btn
+{
+    width: 250px;
+    background-color: var(--dark);
+    text-align: left;
+    padding: 15px 20px;
+    margin: 5px auto 5px 0;
+    border: none;
+    border-radius: 10px;
+}
+
+.option-btn:hover
+{
+    background-color: var(--accent);
+    color: var(--dark);
 }
