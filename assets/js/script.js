@@ -6,28 +6,28 @@ const questions =
 [
     { 
         question: 'Arrays in Javascript can be used to store __________.', 
-        aanswer: '4. all of the above', 
-        choices: [{choice: '1. numbers'}, {choice: '2. booleans'}, {choice: '3. strings'}, {choice: '4. all of the above'}]
+        answer: '4. all of the above', 
+        choices: ['1. numbers', '2. booleans', '3. strings', '4. all of the above']
     },
     { 
         question: 'Inside which HTML element do we put the javascript?', 
-        a: '3. <script>', 
-        choices: [{choice: '1. <h1>'}, {choice: '2. <js>'}, {choice: '3. <script>'}, {choice: '4. <head>'}]
+        answer: '3. <script>', 
+        choices: ['1. <h1>', '2. <js>', '3. <script>', '4. <head>']
     },
     { 
-        q: 'What syntax would call a function?', 
-        a: '4. function()', 
-        choices: [{choice: '1. var function'}, {choice: '2. function'}, {choice: '3. call function'}, {choice: '4. function()'}]
+        question: 'What syntax would call a function?', 
+        answer: '4. function()', 
+        choices: ['1. var function', '2. function', '3. call function', '4. function()']
     },
     { 
-        q: 'What does DOM stand for?', 
-        a: '2. Document Object Model', 
-        choices: [{choice: '1. Dependent Origin Made'}, {choice: '2. Document Object Model'}, {choice: '3. Direct Obligation Met'}, {choice: '4. Duplicate Object Mode'}]
+        question: 'What does DOM stand for?', 
+        aanswer: '2. Document Object Model', 
+        choices: ['1. Dependent Origin Made', '2. Document Object Model', '3. Direct Obligation Met', '4. Duplicate Object Mode']
     },
     {
-        q: 'The condition in an if/else statement is enclosed with ________.',
-        a: '1. parentheses',
-        choices: [{choice: '1. parentheses'}, {choice: '2. quotes'}, {choice: '3. braces'}, {choice: '4. brackets'}]
+        question: 'The condition in an if/else statement is enclosed with ________.',
+        answer: '1. parentheses',
+        choices: ['1. parentheses', '2. quotes', '3. braces', '4. brackets']
     }
 ];
 
@@ -57,7 +57,7 @@ var landingPage = function()
 //--------timer function for startQuiz
 var timer = function()
 {
-    timeLeft = 60;
+    timeLeft = 5;
     document.getElementById("timer").innerHTML = timeLeft;
     var timeInterval = setInterval(function ()
     {
@@ -88,11 +88,11 @@ var newQuestion = function()
 
     var questionTitle = document.createElement("h1");
     questionTitle.className = "question";
-    questionTitle.textContent = "The question from the array will go here.";
+    questionTitle.textContent = questions.question[0];
 
     var answerOne = document.createElement("button")
     answerOne.className = "option-btn";
-    answerOne.textContent = "choice 1";
+    answerOne.textContent = questions.choices;
 
     var answerTwo = document.createElement("button")
     answerTwo.className = "option-btn";
@@ -126,5 +126,29 @@ var newQuestion = function()
         //stop timer and go to high scores page
     }
 };
+
+var timedOut = function()
+{
+    document.getElementById("main").innerHTML = "";
+
+    var timedOutTitle = document.createElement("h1");
+    timedOutTitle.className = "landing-title";
+    timedOutTitle.textContent = "Time's up!";
+
+    var timedOutDesc = document.createElement("p")
+    timedOutDesc.className = "landing-p";
+    timedOutDesc.textContent = "You ran out of time! Want to try again?";
+
+    var tryAgain = document.createElement("button");
+    tryAgain.className = "landing-btn";
+    tryAgain.textContent = "Yes!";
+
+    var timedOutPage = document.getElementById("main");
+    timedOutPage.appendChild(timedOutTitle);
+    timedOutPage.appendChild(timedOutDesc);
+    timedOutPage.appendChild(tryAgain);
+
+    tryAgain.addEventListener("click", startQuiz)
+}
 
 window.onload = landingPage();
