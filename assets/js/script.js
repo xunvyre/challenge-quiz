@@ -1,33 +1,36 @@
 //--------define universal variables
 var timeLeft = 0;
+var timeInterval; 
+var currentQuestion = 0;
+var viewScore = document.getElementById("view-scores");
 
 //--------object array for quiz questions
-const questions =
+var questions =
 [
     { 
-        question: 'Arrays in Javascript can be used to store __________.', 
-        answer: '4. all of the above', 
-        choices: ['1. numbers', '2. booleans', '3. strings', '4. all of the above']
+        ask: "Arrays in Javascript can be used to store __________.", 
+        answer: "4. all of the above", 
+        options: ["1. numbers", "2. booleans", "3. strings", "4. all of the above"]
     },
     { 
-        question: 'Inside which HTML element do we put the javascript?', 
-        answer: '3. <script>', 
-        choices: ['1. <h1>', '2. <js>', '3. <script>', '4. <head>']
+        ask: "Inside which HTML element do we put the javascript?", 
+        answer: "3. <script>", 
+        options: ["1. <h1>", "2. <js>", "3. <script>", "4. <head>"]
     },
     { 
-        question: 'What syntax would call a function?', 
-        answer: '4. function()', 
-        choices: ['1. var function', '2. function', '3. call function', '4. function()']
+        ask: "What syntax would call a function?", 
+        answer: "4. function()", 
+        options: ["1. var function", "2. function", "3. call function", "4. function()"]
     },
     { 
-        question: 'What does DOM stand for?', 
-        aanswer: '2. Document Object Model', 
-        choices: ['1. Dependent Origin Made', '2. Document Object Model', '3. Direct Obligation Met', '4. Duplicate Object Mode']
+        ask: "What does DOM stand for?", 
+        answer: "2. Document Object Model", 
+        options: ["1. Dependent Origin Made", "2. Document Object Model", "3. Direct Obligation Met", "4. Duplicate Object Mode"]
     },
     {
-        question: 'The condition in an if/else statement is enclosed with ________.',
-        answer: '1. parentheses',
-        choices: ['1. parentheses', '2. quotes', '3. braces', '4. brackets']
+        ask: "The condition in an if/else statement is enclosed with ________.",
+        answer: "1. parentheses",
+        options: ["1. parentheses", "2. quotes", "3. braces", "4. brackets"]
     }
 ];
 
@@ -57,9 +60,9 @@ var landingPage = function()
 //--------timer function for startQuiz
 var timer = function()
 {
-    timeLeft = 5;
+    timeLeft = 80;
     document.getElementById("timer").innerHTML = timeLeft;
-    var timeInterval = setInterval(function ()
+    timeInterval = setInterval(function ()
     {
         if (timeLeft > 0)
         {
@@ -73,60 +76,73 @@ var timer = function()
         }
     }, 1000);
 
-}
+};
+
 
 //--------calls timer function and passes the user into the first question
 var startQuiz = function()
 {
     timer();
-    newQuestion();
-}
+    newQuestion(questions[currentQuestion]);
+};
 
-var newQuestion = function()
+var newQuestion = function(question) //i want each element to be populated by the corresponding property in the array and looped through when an answer is selected
 {
     document.getElementById("main").innerHTML = "";
 
     var questionTitle = document.createElement("h1");
     questionTitle.className = "question";
-    questionTitle.textContent = questions.question[0];
-
-    var answerOne = document.createElement("button")
-    answerOne.className = "option-btn";
-    answerOne.textContent = questions.choices;
-
-    var answerTwo = document.createElement("button")
-    answerTwo.className = "option-btn";
-    answerTwo.textContent = "choice 2";
-
-    var answerThree = document.createElement("button")
-    answerThree.className = "option-btn";
-    answerThree.textContent = "choice 3";
-
-    var answerFour = document.createElement("button")
-    answerFour.className = "option-btn";
-    answerFour.textContent = "choice 4";
+    questionTitle.textContent = question.ask;
 
     var pageSetup = document.getElementById("main");
     pageSetup.appendChild(questionTitle);
-    pageSetup.appendChild(answerOne);
-    pageSetup.appendChild(answerTwo);
-    pageSetup.appendChild(answerThree);
-    pageSetup.appendChild(answerFour);
 
-    if (choice === a && i > questions.length)
+    for (i = 0; i < question.options.length; i++)
     {
-        //go to the next question by calling the function for the next object in the array if there's still another option left
-    }
-    else if (i > questions.length)
-    {
-        //apply the penalty to the timer and ^^
-    }
-    else
-    {
-        //stop timer and go to high scores page
+        var answer = document.createElement("button")
+        answer.className = "option-btn";
+        answer.textContent = question.options[i];
+        if (question.options[i] === question.answer)
+        {
+            answer.setAttribute("onclick", "correct()")
+        }
+        else
+        {
+            answer.setAttribute("onclick", "incorrect()")
+        }
+        pageSetup.appendChild(answer);
     }
 };
 
+var correct = function()
+{
+    document.getElementById("correct").style.display = "block";
+    document.getElementById("incorrect").style.display = "none";
+    nextQuestion();
+};
+
+var incorrect = function()
+{
+    document.getElementById("incorrect").style.display = "block";
+    document.getElementById("correct").style.display = "none";
+    timeLeft -= 10;
+    nextQuestion();
+};
+
+var nextQuestion = function()
+{
+    currentQuestion++;
+    if (currentQuestion < questions.length)
+    {
+        newQuestion(questions[currentQuestion]);
+    }
+    else
+    {
+        endQuiz();
+    }
+}
+
+//--------page to reset the quiz on timeout
 var timedOut = function()
 {
     document.getElementById("main").innerHTML = "";
@@ -149,6 +165,43 @@ var timedOut = function()
     timedOutPage.appendChild(tryAgain);
 
     tryAgain.addEventListener("click", startQuiz)
-}
+};
+
+var endQuiz = function()
+{
+    clearInterval(timeInterval);
+    localStorage.setItem("timeLeft", timeLeft);
+    document.getElementById("main").innerHTML = "";
+
+    var endQuizTitle = document.createElement("h1");
+    endQuizTitle.className = "landing-title";
+    endQuizTitle.textContent = "You finished the quiz!";
+
+    var endQuizPrompt = document.createElement("p");
+    endQuizPrompt.classname = "landing-p";
+    endQuizPrompt.textContent = "Enter your name to save your score!";
+
+    //var endQuizSubmit = "input element"
+
+    var endQuizPage = document.getElementById("main");
+    endQuizPage.appendChild(endQuizTitle);
+    endQuizPage.appendChild(endQuizPrompt);
+};
+
+var loadScores = function()
+{
+    timeLeft = 0;
+    document.getElementById("main").innerHTML = "";
+
+    var highScoresTitle = document.createElement("h1");
+    highScoresTitle.classname = "landing-title";
+    highScoresTitle.textContent = "Current High Scores:";
+
+    //get the scores from localStorage and display them here
+
+    var highScoresPage = document.getElementById("main");
+    highScoresPage.appendChild = (highScoresTitle);
+};
 
 window.onload = landingPage();
+viewScore.addEventListener("click", loadScores)
