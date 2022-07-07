@@ -37,7 +37,7 @@ var questions =
 //--------introduction page
 var landingPage = function()
 {
-    var firstTitle = document.createElement("h1");
+    var firstTitle = document.createElement("h1");      //generate page
     firstTitle.className = "landing-title";
     firstTitle.textContent = "Coding Quiz Challenge";
 
@@ -54,13 +54,13 @@ var landingPage = function()
     newQuiz.appendChild(quizDesc);
     newQuiz.appendChild(startBtn);
 
-    startBtn.addEventListener("click", startQuiz)
+    startBtn.addEventListener("click", startQuiz)       //and call the quiz to start
 };
 
 //--------timer function for startQuiz
 var timer = function()
 {
-    timeLeft = 80;
+    timeLeft = 60;
     document.getElementById("timer").innerHTML = timeLeft;
     timeInterval = setInterval(function ()
     {
@@ -78,7 +78,6 @@ var timer = function()
 
 };
 
-
 //--------calls timer function and passes the user into the first question
 var startQuiz = function()
 {
@@ -86,23 +85,24 @@ var startQuiz = function()
     newQuestion(questions[currentQuestion]);
 };
 
-var newQuestion = function(question) //i want each element to be populated by the corresponding property in the array and looped through when an answer is selected
+//--------format and loop through each question
+var newQuestion = function(question)    //assign array element
 {
-    document.getElementById("main").innerHTML = "";
+    document.getElementById("main").innerHTML = "";     //clear the page
 
-    var questionTitle = document.createElement("h1");
+    var questionTitle = document.createElement("h1");       //and generate the first question
     questionTitle.className = "question";
     questionTitle.textContent = question.ask;
 
     var pageSetup = document.getElementById("main");
     pageSetup.appendChild(questionTitle);
 
-    for (i = 0; i < question.options.length; i++)
+    for (i = 0; i < question.options.length; i++)       //pull the sub array
     {
-        var answer = document.createElement("button")
+        var answer = document.createElement("button")       //and format the option buttons
         answer.className = "option-btn";
         answer.textContent = question.options[i];
-        if (question.options[i] === question.answer)
+        if (question.options[i] === question.answer)        //assign the buttons their value to call corresponding function
         {
             answer.setAttribute("onclick", "correct()")
         }
@@ -114,38 +114,38 @@ var newQuestion = function(question) //i want each element to be populated by th
     }
 };
 
-var correct = function()
+var correct = function()    //if the button was assigned correct
 {
     document.getElementById("correct").style.display = "block";
-    document.getElementById("incorrect").style.display = "none";
-    nextQuestion();
+    document.getElementById("incorrect").style.display = "none";    //display the confirmation
+    nextQuestion();     //and pass into the check function
 };
 
-var incorrect = function()
+var incorrect = function()      //if the button was assigned incorrect
 {
     document.getElementById("incorrect").style.display = "block";
-    document.getElementById("correct").style.display = "none";
-    timeLeft -= 10;
-    nextQuestion();
+    document.getElementById("correct").style.display = "none";      //display the confirmation
+    timeLeft -= 10;     //subtract the time penalty
+    nextQuestion();     //and pass into the check function
 };
 
-var nextQuestion = function()
+var nextQuestion = function()   //check to see if there's another question
 {
-    currentQuestion++;
-    if (currentQuestion < questions.length)
+    currentQuestion++;      //increase currentQuestion value
+    if (currentQuestion < questions.length)     //check against questions.length
     {
-        newQuestion(questions[currentQuestion]);
+        newQuestion(questions[currentQuestion]);       //continue the loop or
     }
     else
     {
-        endQuiz();
+        endQuiz();     //end the quiz if questions are finished
     }
 }
 
 //--------page to reset the quiz on timeout
 var timedOut = function()
 {
-    document.getElementById("main").innerHTML = "";
+    document.getElementById("main").innerHTML = "";     //clear the page and generate a new one
 
     var timedOutTitle = document.createElement("h1");
     timedOutTitle.className = "landing-title";
@@ -164,43 +164,85 @@ var timedOut = function()
     timedOutPage.appendChild(timedOutDesc);
     timedOutPage.appendChild(tryAgain);
 
-    tryAgain.addEventListener("click", startQuiz)
+    tryAgain.addEventListener("click", startQuiz)       //call the quiz to start over without calling the landing page
 };
 
+//--------celebration page to save score
 var endQuiz = function()
 {
-    clearInterval(timeInterval);
-    localStorage.setItem("timeLeft", timeLeft);
-    document.getElementById("main").innerHTML = "";
+    clearInterval(timeInterval);        //stop the timer
+    document.getElementById("main").innerHTML = "";     //clear the page
 
-    var endQuizTitle = document.createElement("h1");
+    var endQuizTitle = document.createElement("h1");        //and generate a new one
     endQuizTitle.className = "landing-title";
     endQuizTitle.textContent = "You finished the quiz!";
 
     var endQuizPrompt = document.createElement("p");
-    endQuizPrompt.classname = "landing-p";
+    endQuizPrompt.className = "landing-p";
     endQuizPrompt.textContent = "Enter your name to save your score!";
 
-    //var endQuizSubmit = "input element"
+    var endQuizForm = document.createElement("input");
+    endQuizForm.setAttribute("type", "text");
+    endQuizForm.setAttribute("id", "name");
+    endQuizForm.setAttribute("placeholder", "Your Name");
+    endQuizForm.className = "end-input";
+
+    var endQuizSubmit = document.createElement("button");
+    endQuizSubmit.setAttribute("type", "submit");
+    endQuizSubmit.textContent = "Save my score!";
+    endQuizSubmit.setAttribute("onclick", "saveScore()")
+    endQuizSubmit.className = "landing-btn";
 
     var endQuizPage = document.getElementById("main");
     endQuizPage.appendChild(endQuizTitle);
     endQuizPage.appendChild(endQuizPrompt);
+    endQuizPage.appendChild(endQuizForm);
+    endQuizPage.appendChild(endQuizSubmit);
+};
+
+var saveScore = function()
+{
+    var score =
+    {
+        "name": document.getElementById("name").value,
+        "timeLeft": timeLeft
+    }
+
+    localStorage.setItem("playerInfo", JSON.stringify(score));
+
+    loadScores(score);
 };
 
 var loadScores = function()
 {
     timeLeft = 0;
     document.getElementById("main").innerHTML = "";
+    document.getElementById("correct").style.display = "none";
+    document.getElementById("incorrect").style.display = "none";
 
     var highScoresTitle = document.createElement("h1");
-    highScoresTitle.classname = "landing-title";
+    highScoresTitle.className = "landing-title";
     highScoresTitle.textContent = "Current High Scores:";
 
-    //get the scores from localStorage and display them here
+    var highScores = document.createElement("p");
+    highScores.className = "landing-p";
+    highScores.textContent = "example"; //JSON.parse(localStorage.getItem(score));
+
+    var startOver = document.createElement("button");
+    startOver.textContent = "Start over!";
+    startOver.className = "landing-btn";
+    startOver.setAttribute("onclick", "landingPage()");
+
+    var clearScores = document.createElement("button");
+    clearScores.textContent = "Clear scores.";
+    clearScores.className = "landing-btn";
+    clearScores.setAttribute("onclick", "clearStorage()");
 
     var highScoresPage = document.getElementById("main");
-    highScoresPage.appendChild = (highScoresTitle);
+    highScoresPage.appendChild(highScoresTitle);
+    highScoresPage.appendChild(highScores);
+    highScoresPage.appendChild(startOver);
+    highScoresPage.appendChild(clearScores);
 };
 
 window.onload = landingPage();
