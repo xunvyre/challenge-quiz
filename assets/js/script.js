@@ -37,6 +37,9 @@ var questions =
 //--------introduction page
 var landingPage = function()
 {
+    currentQuestion = 0;        //reset currentQuestion variable if coming from loadScores
+    document.getElementById("main").innerHTML = "";     //clear the page if coming from loadScores
+    
     var firstTitle = document.createElement("h1");      //generate page
     firstTitle.className = "landing-title";
     firstTitle.textContent = "Coding Quiz Challenge";
@@ -173,7 +176,7 @@ var endQuiz = function()
     clearInterval(timeInterval);        //stop the timer
     document.getElementById("main").innerHTML = "";     //clear the page
 
-    var endQuizTitle = document.createElement("h1");        //and generate a new one
+    var endQuizTitle = document.createElement("h1");        //and generate a new page
     endQuizTitle.className = "landing-title";
     endQuizTitle.textContent = "You finished the quiz!";
 
@@ -202,31 +205,26 @@ var endQuiz = function()
 
 var saveScore = function()
 {
-    var score =
-    {
-        "name": document.getElementById("name").value,
-        "timeLeft": timeLeft
-    }
-
-    localStorage.setItem("playerInfo", JSON.stringify(score));
-
-    loadScores(score);
+    localStorage.setItem("newScore", timeLeft);
+    localStorage.setItem("newName", document.getElementById("name").value);
+    loadScores();
 };
 
 var loadScores = function()
 {
     timeLeft = 0;
+
     document.getElementById("main").innerHTML = "";
     document.getElementById("correct").style.display = "none";
     document.getElementById("incorrect").style.display = "none";
 
     var highScoresTitle = document.createElement("h1");
     highScoresTitle.className = "landing-title";
-    highScoresTitle.textContent = "Current High Scores:";
+    highScoresTitle.textContent = "Current Score:";
 
     var highScores = document.createElement("p");
     highScores.className = "landing-p";
-    highScores.textContent = "example"; //JSON.parse(localStorage.getItem(score));
+    highScores.textContent = +localStorage.getItem("newName")+ "'s current score is " +localStorage.getItem("newScore")+ "!";
 
     var startOver = document.createElement("button");
     startOver.textContent = "Start over!";
@@ -234,9 +232,9 @@ var loadScores = function()
     startOver.setAttribute("onclick", "landingPage()");
 
     var clearScores = document.createElement("button");
-    clearScores.textContent = "Clear scores.";
+    clearScores.textContent = "Clear score.";
     clearScores.className = "landing-btn";
-    clearScores.setAttribute("onclick", "clearStorage()");
+    clearScores.setAttribute("onclick", "localStorage.clear()");
 
     var highScoresPage = document.getElementById("main");
     highScoresPage.appendChild(highScoresTitle);

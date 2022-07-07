@@ -74,6 +74,7 @@ main
     border: none;
     border-radius: 10px;
     width: fit-content;
+    margin-bottom: 10px;
 }
 
 .landing-btn:hover
