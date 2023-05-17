@@ -13,7 +13,7 @@ Known issues:
 * JavaScript
 
 ## Website
-https://xunvyre.github.io/challenge-four/
+https://xunvyre.github.io/challenge-quiz/
 
 ## Screenshot(s)
 ![A screenshot of the landing page of the quiz.](./assets/images/screenshot.jpg)
